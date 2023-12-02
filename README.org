@@ -1,0 +1,5 @@
+* Advent of Code 2023
+Most of the problems will be tackled using Rust.
+Both for fun and to refresh my Rust skills.
+
+Issues and Code Reviews are welcomed.
