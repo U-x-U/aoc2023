@@ -1,8 +1,11 @@
-// impl char {
-//     fn is_symbol(&self) -> bool {
-//         !self.is_numeric() && self != '.'
-//     }
-// }
+trait CharExt {
+    fn is_symbol(&self) -> bool;
+}
+impl CharExt for char {
+    fn is_symbol(&self) -> bool {
+        !self.is_numeric() && self.ne(&'.')
+    }
+}
 fn main() {
     let matrix = include_str!("input.txt")
         .lines()
@@ -27,28 +30,19 @@ fn main() {
                     cur = d;
                     if j != 0 {
                         // check the triplet in the previous col if it's not the first col
-                        is_part_number |= matrix[i][j - 1] != '.'
-                            || (i != 0
-                                && !matrix[i - 1][j - 1].is_numeric()
-                                && matrix[i - 1][j - 1] != '.')
-                            || (i != matrix.len() - 1
-                                && !matrix[i + 1][j - 1].is_numeric()
-                                && matrix[i + 1][j - 1] != '.');
+                        is_part_number |= matrix[i][j - 1].is_symbol()
+                            || (i != 0 && matrix[i - 1][j - 1].is_symbol())
+                            || (i != matrix.len() - 1 && matrix[i + 1][j - 1].is_symbol());
                     }
                 }
                 // check the char above and below.
-                is_part_number |=
-                    (i != 0 && !matrix[i - 1][j].is_numeric() && matrix[i - 1][j] != '.')
-                        || (i != matrix.len() - 1
-                            && !matrix[i + 1][j].is_numeric()
-                            && matrix[i + 1][j] != '.');
+                is_part_number |= (i != 0 && matrix[i - 1][j].is_symbol())
+                    || (i != matrix.len() - 1 && matrix[i + 1][j].is_symbol());
             } else {
                 if cur != 0 {
-                    is_part_number |= matrix[i][j] != '.'
-                        || (i != 0 && !matrix[i - 1][j].is_numeric() && matrix[i - 1][j] != '.')
-                        || (i != matrix.len() - 1
-                            && !matrix[i + 1][j].is_numeric()
-                            && matrix[i + 1][j] != '.');
+                    is_part_number |= matrix[i][j].is_symbol()
+                        || (i != 0 && matrix[i - 1][j].is_symbol())
+                        || (i != matrix.len() - 1 && matrix[i + 1][j].is_symbol());
                     // add if is part number
                     if is_part_number {
                         ans += cur;
