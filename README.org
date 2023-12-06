@@ -1,4 +1,4 @@
-* Advent of Code 2023
+* [[https://adventofcode.com/2023/about][Advent of Code 2023]]
 Most of the problems will be tackled using Rust.
 Both for fun and to refresh my Rust skills.
 
