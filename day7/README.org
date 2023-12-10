@@ -1,0 +1,55 @@
+#+title: AOC 2023 Day7
+
+* Issue
+Found something strange.
+These two lines get difference results
+#+begin_src rust
+cards.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)).then(a.2.cmp(&b.2)));
+cards.sort();
+#+end_src
+** Some Details
+*** cards
+=cards= is a vector of tuples.
+the three fields of the tuple is
+- a vector of i32, denoting the count of same labels, reverse ordered. i.e. [5] for "AAAAA", [3,1,1] for "A2AA3"
+- a vector of labels, the order is the same as card order.
+- an integer, which is the bid
+*** Definition of Card
+#+begin_src rust
+#[derive(PartialEq, Eq, PartialOrd, Clone, Copy, Debug)]
+struct Card(char);
+impl Ord for Card {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let ord_arr = [
+            '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A',
+        ];
+        let r1 = ord_arr
+            .iter()
+            .position(|&ch| ch == self.0)
+            .expect("card val not found");
+        let r2 = ord_arr
+            .iter()
+            .position(|&ch| ch == other.0)
+            .expect("card val not found");
+        r1.cmp(&r2)
+    }
+}
+#+end_src
+** test
+for the test input,
+after explicitly per-field sorting
+the result is correct
+#+begin_quote
+[([2, 1, 1, 1], [Card('3'), Card('2'), Card('T'), Card('3'), Card('K')], 765),
+ ([2, 2, 1], [Card('K'), Card('T'), Card('J'), Card('J'), Card('T')], 220),
+ ([2, 2, 1], [Card('K'), Card('K'), Card('6'), Card('7'), Card('7')], 28),
+ ([3, 1, 1], [Card('T'), Card('5'), Card('5'), Card('J'), Card('5')], 684),
+ ([3, 1, 1], [Card('Q'), Card('Q'), Card('Q'), Card('J'), Card('A')], 483)]
+#+end_quote
+#+begin_quote
+[([2, 1, 1, 1], [Card('3'), Card('2'), Card('T'), Card('3'), Card('K')], 765),
+ ([2, 2, 1], [Card('K'), Card('K'), Card('6'), Card('7'), Card('7')], 28),
+ ([2, 2, 1], [Card('K'), Card('T'), Card('J'), Card('J'), Card('T')], 220),
+ ([3, 1, 1], [Card('Q'), Card('Q'), Card('Q'), Card('J'), Card('A')], 483),
+ ([3, 1, 1], [Card('T'), Card('5'), Card('5'), Card('J'), Card('5')], 684)]
+#+end_quote
