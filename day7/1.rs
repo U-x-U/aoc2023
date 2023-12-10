@@ -19,8 +19,8 @@ impl Ord for Card {
 }
 
 fn main() {
-    // let input = include_str!("test.txt");
-    let input = include_str!("input.txt");
+    let input = include_str!("test.txt");
+    // let input = include_str!("input.txt");
     let cards = input
         .lines()
         .map(|line| {
@@ -75,9 +75,12 @@ fn main() {
             (k, cards, bid)
         })
         .collect::<Vec<_>>();
-    cards.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)).then(a.2.cmp(&b.2)));
-    // cards.sort();
+    // cards.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)).then(a.2.cmp(&b.2)));
+    cards.sort();
     println!("{:?}", cards);
+    for i in 1..cards.len() {
+        println!("{:?}", cards[i - 1].cmp(&cards[i]));
+    }
     println!(
         "{}",
         cards
