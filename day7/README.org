@@ -37,7 +37,7 @@ impl Ord for Card {
 #+end_src
 ** test
 for the test input,
-after explicitly per-field sorting
+*** explicitly per-field sorting
 the result is correct
 #+begin_quote
 [([2, 1, 1, 1], [Card('3'), Card('2'), Card('T'), Card('3'), Card('K')], 765),
@@ -46,6 +46,7 @@ the result is correct
  ([3, 1, 1], [Card('T'), Card('5'), Card('5'), Card('J'), Card('5')], 684),
  ([3, 1, 1], [Card('Q'), Card('Q'), Card('Q'), Card('J'), Card('A')], 483)]
 #+end_quote
+*** cards.sort()
 #+begin_quote
 [([2, 1, 1, 1], [Card('3'), Card('2'), Card('T'), Card('3'), Card('K')], 765),
  ([2, 2, 1], [Card('K'), Card('K'), Card('6'), Card('7'), Card('7')], 28),
