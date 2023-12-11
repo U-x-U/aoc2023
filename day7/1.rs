@@ -1,20 +1,22 @@
 use std::cmp::Ordering;
+
 #[derive(PartialEq, Eq, PartialOrd, Clone, Copy, Debug)]
 struct Card(char);
-impl Ord for Card {
-    fn cmp(&self, other: &Self) -> Ordering {
-        let ord_arr = [
+impl Card {
+    fn rank(&self) -> usize {
+        static RANKS: [char; 13] = [
             '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A',
         ];
-        let r1 = ord_arr
+        RANKS
             .iter()
             .position(|&ch| ch == self.0)
-            .expect("card val not found");
-        let r2 = ord_arr
-            .iter()
-            .position(|&ch| ch == other.0)
-            .expect("card val not found");
-        r1.cmp(&r2)
+            .expect("card val not found")
+    }
+}
+
+impl Ord for Card {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.rank().cmp(&other.rank())
     }
 }
 
@@ -75,8 +77,8 @@ fn main() {
             (k, cards, bid)
         })
         .collect::<Vec<_>>();
-    // cards.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)).then(a.2.cmp(&b.2)));
-    cards.sort();
+    cards.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)).then(a.2.cmp(&b.2)));
+    // cards.sort();
     println!("{:?}", cards);
     for i in 1..cards.len() {
         println!("{:?}", cards[i - 1].cmp(&cards[i]));

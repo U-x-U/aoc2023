@@ -1,20 +1,21 @@
 use std::cmp::Ordering;
 #[derive(PartialEq, Eq, PartialOrd, Clone, Copy, Debug)]
 struct Card(char);
-impl Ord for Card {
-    fn cmp(&self, other: &Self) -> Ordering {
-        let ord_arr = [
+impl Card {
+    fn rank(&self) -> usize {
+        static RANKS: [char; 13] = [
             'J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A',
         ];
-        let r1 = ord_arr
+        RANKS
             .iter()
             .position(|&ch| ch == self.0)
-            .expect("card val not found");
-        let r2 = ord_arr
-            .iter()
-            .position(|&ch| ch == other.0)
-            .expect("card val not found");
-        r1.cmp(&r2)
+            .expect("card val not found")
+    }
+}
+
+impl Ord for Card {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.rank().cmp(&other.rank())
     }
 }
 
