@@ -11,13 +11,9 @@ fn main() {
                 .map(|num_str| num_str.parse::<usize>().expect("failed to parse num"))
                 .collect::<Vec<_>>();
             let mut memo = HashMap::new();
-            let ans = dfs(&springs, &groups, 0, 0, 0, &mut memo);
-            ans
+            dfs(&springs, &groups, 0, 0, 0, &mut memo)
         })
-        .fold(0, |acc, x| {
-            println!("{}", x);
-            acc + x
-        });
+        .fold(0, |acc, x| acc + x);
 
     println!("{}", ans);
 }
