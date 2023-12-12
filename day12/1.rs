@@ -19,18 +19,15 @@ fn main() {
 }
 
 fn dfs(
-    springs: &Vec<char>,
-    groups: &Vec<usize>,
+    springs: &[char],
+    groups: &[usize],
     i: usize,
     j: usize,
     k: usize,
     memo: &mut HashMap<(usize, usize, usize), usize>,
 ) -> usize {
     if i == springs.len() && j == groups.len() {
-        if k == 0 {
-            return 1;
-        }
-        return 0;
+        return (k == 0) as usize;
     }
     if i == springs.len() {
         assert!(j < groups.len());
@@ -40,40 +37,29 @@ fn dfs(
         return 0;
     }
     if j == groups.len() {
-        if k == 0 && springs.iter().skip(i).all(|&ch| ch != '#') {
-            return 1;
-        }
-        return 0;
+        return (k == 0 && springs.iter().skip(i).all(|&ch| ch != '#')) as usize;
     }
-    match springs[i] {
-        '.' => {
-            if k == 0 {
-                dfs(springs, groups, i + 1, j, 0, memo)
+    let calc_dot = |memo| -> usize {
+        if k == 0 {
+            dfs(springs, groups, i + 1, j, 0, memo)
+        } else {
+            if k == groups[j] {
+                dfs(springs, groups, i + 1, j + 1, 0, memo)
             } else {
-                if k == groups[j] {
-                    dfs(springs, groups, i + 1, j + 1, 0, memo)
-                } else {
-                    0
-                }
+                0
             }
         }
-        '#' => dfs(springs, groups, i + 1, j, k + 1, memo),
+    };
+    let calc_sharp = |memo| -> usize { dfs(springs, groups, i + 1, j, k + 1, memo) };
+    match springs[i] {
+        '.' => calc_dot(memo),
+        '#' => calc_sharp(memo),
         '?' => {
             if let Some(&ans) = memo.get(&(i, j, k)) {
                 return ans;
             }
             // ? can serve as a # or a .
-            let ans = { dfs(springs, groups, i + 1, j, k + 1, memo) } + {
-                if k == 0 {
-                    dfs(springs, groups, i + 1, j, 0, memo)
-                } else {
-                    if k == groups[j] {
-                        dfs(springs, groups, i + 1, j + 1, 0, memo)
-                    } else {
-                        0
-                    }
-                }
-            };
+            let ans = calc_sharp(memo) + calc_dot(memo);
             memo.insert((i, j, k), ans);
             ans
         }
