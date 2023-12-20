@@ -17,9 +17,11 @@ fn main() {
         })
         .collect::<HashMap<_, _>>();
     let ans = input_it
-        .map(|line| {
-            let line = line.trim_matches('{');
-            let line = line.trim_matches('}');
+        .map(|mut line| {
+            {
+                let pat: &[_] = &['{', '}'];
+                line = line.trim_matches(pat);
+            }
             line.split(',')
                 .map(|rating| {
                     let (cat, rate) = rating.split_once('=').expect("failed to split once at =");
